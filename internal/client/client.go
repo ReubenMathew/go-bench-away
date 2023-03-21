@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/user"
+	"time"
 
 	"github.com/nats-io/nats.go"
 )
@@ -15,7 +16,9 @@ const (
 	logArtifactKeyTemplate     = "jobs/%s/log.txt"
 	resultsArtifactKeyTemplate = "jobs/%s/results.txt"
 	scriptArtifactKeyTemplate  = "jobs/%s/run.sh"
-	defaultClientName          = "go-bench-away CLI"
+	defaultClientName          = "GoBenchAway CLI"
+	jobHandleRetryTimeout      = 30 * time.Second
+	jobHandleRetryDelay        = 1 * time.Second
 )
 
 type Options struct {
@@ -192,5 +195,5 @@ func getClientName() string {
 	if err1 != nil || err2 != nil {
 		return defaultClientName
 	}
-	return fmt.Sprintf("%s@%s", user.Username, hostname)
+	return fmt.Sprintf("%s (%s@%s)", defaultClientName, user.Username, hostname)
 }
